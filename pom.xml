@@ -118,7 +118,14 @@
 
 	<build>
 		<plugins>
-
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<configuration>
+						<mainClass>com.protect.security_manager.SecureGuardApplication</mainClass>
+						<layout>JAR</layout>
+					</configuration>
+				</plugin>
 
 
 			<plugin>
