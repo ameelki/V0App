@@ -13,7 +13,6 @@
 	<artifactId>security-manager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SecureGuard</name>
-	<packaging>war</packaging>
 
 	<description>Service de gestion de l&apos;authentification et de l&apos;autorisation dans l&apos;application.</description>
 	<url/>
@@ -119,6 +118,8 @@
 
 	<build>
 		<plugins>
+
+
 
 			<plugin>
 				<groupId>org.openapitools</groupId>
