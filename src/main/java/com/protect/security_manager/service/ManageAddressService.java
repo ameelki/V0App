@@ -1,14 +1,12 @@
 package com.protect.security_manager.service;
 
 import com.protect.security_manager.entity.Country;
-import com.protect.security_manager.exception.GlobalExceptionHandler;
+import com.protect.security_manager.exception.CountryAlreadyExistsException;
 import com.protect.security_manager.exception.ResourceNotFoundException;
 import com.protect.security_manager.repository.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import security.manager.model.CreateCountry201Response;
 import security.manager.model.GetAllCountriesAndProvinces200ResponseInner;
 import security.manager.model.GetAllCountriesAndProvinces200ResponseInnerProvincesInner;
 
@@ -72,6 +70,30 @@ public class ManageAddressService {
                 })
                 .collect(Collectors.toList()); // Collecter en tant que liste
     }
+
+    public CreateCountry201Response createCountry(String code, String name) {
+        // Vérification si un pays avec ce code existe déjà
+        if (countryRepository.findByCode(code).isPresent()) {
+            throw new CountryAlreadyExistsException("Country with code " + code + " already exists");
+        }
+
+        // Création d'un nouveau pays
+        Country newCountry = new Country(code, name);
+        newCountry= countryRepository.save(newCountry);
+
+         CreateCountry201Response createCountry201Response=new CreateCountry201Response();
+         createCountry201Response.id(newCountry.getId().toString());
+         createCountry201Response.code(newCountry.getCode());
+         createCountry201Response.name(newCountry.getName());
+         return createCountry201Response;
+
+
+    }
+
+
+
+
+
 
 
 

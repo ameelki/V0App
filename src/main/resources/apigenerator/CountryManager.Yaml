@@ -57,3 +57,160 @@ paths:
                   message:
                     type: string
                     example: "An unexpected error occurred."
+
+    post:
+      summary: Create a new country
+      description: "Creates a new country with the given information."
+      tags:
+        - Countries
+      operationId: createCountry
+      requestBody:
+        description: Country object that needs to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "FR"
+                  description: "The country code."
+                name:
+                  type: string
+                  example: "France"
+                  description: "The name of the country."
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+            example: "Bearer <your_token_here>"
+      responses:
+        '201':
+          description: Country created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "1"
+                    description: "ID of the created country."
+                  code:
+                    type: string
+                    example: "FR"
+                    description: "The country code."
+                  name:
+                    type: string
+                    example: "France"
+                    description: "The name of the country."
+        '400':
+          description: Invalid input, country creation failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid input."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
+
+  /countries/{id}/provinces:
+    post:
+      summary: Create a province for a specific country
+      description: "Creates a new province for the country with the given ID."
+      tags:
+        - Provinces
+      operationId: createProvinceForCountry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the country
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        description: Province object that needs to be created for the country
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "IDF"
+                  description: "The province code."
+                name:
+                  type: string
+                  example: "Île-de-France"
+                  description: "The name of the province."
+      responses:
+        '201':
+          description: Province created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "101"
+                    description: "ID of the created province."
+                  code:
+                    type: string
+                    example: "IDF"
+                    description: "The province code."
+                  name:
+                    type: string
+                    example: "Île-de-France"
+                    description: "The name of the province."
+                  countryId:
+                    type: string
+                    example: "1"
+                    description: "ID of the country the province belongs to."
+        '400':
+          description: Invalid input, province creation failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid input."
+        '404':
+          description: Country not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Country not found."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."

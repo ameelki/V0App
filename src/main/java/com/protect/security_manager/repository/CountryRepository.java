@@ -4,8 +4,9 @@ import com.protect.security_manager.entity.Country;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CountryRepository extends JpaRepository<Country, Long> {
-    // Vous pouvez ajouter des méthodes personnalisées ici si nécessaire
-    Country findByCode(String code);
+    Optional<Country> findByCode(String code);
 }
