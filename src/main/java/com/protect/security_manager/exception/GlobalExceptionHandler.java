@@ -25,5 +25,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCountryAlreadyExistsException(CountryAlreadyExistsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(InvalidCountryCode.class)
+    public ResponseEntity<String> handleInvalidCountryCode(InvalidCountryCode ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 
 }

@@ -1,14 +1,18 @@
 package com.protect.security_manager.service;
 
+import com.protect.security_manager.Mapper.CountryMapper;
 import com.protect.security_manager.entity.Country;
 import com.protect.security_manager.exception.CountryAlreadyExistsException;
+import com.protect.security_manager.exception.InvalidCountryCode;
 import com.protect.security_manager.exception.ResourceNotFoundException;
 import com.protect.security_manager.repository.CountryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import security.manager.model.CreateCountry201Response;
 import security.manager.model.GetAllCountriesAndProvinces200ResponseInner;
 import security.manager.model.GetAllCountriesAndProvinces200ResponseInnerProvincesInner;
+import security.manager.model.UpdateCountryRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,8 +24,10 @@ public class ManageAddressService {
 
     @Autowired
     CountryRepository countryRepository;
+    @Autowired
+    CountryMapper countryMapper;
 
-   public List<GetAllCountriesAndProvinces200ResponseInner> getCountries() {
+    public List<GetAllCountriesAndProvinces200ResponseInner> getCountries() {
         List<Country> countries = countryRepository.findAll();
 
         if (countries.isEmpty()) {
@@ -90,8 +96,31 @@ public class ManageAddressService {
 
     }
 
+    public UpdateCountryRequest updateCountry(String code ,UpdateCountryRequest updateCountryRequest) {
+        Optional<Country> optionalCountry = countryRepository.findByCode(code);
+        if (optionalCountry.isPresent()) {
+            Country countryToUpdate = optionalCountry.get();
+
+            // Vérifie si le nouveau code existe déjà dans un autre pays
+            boolean codeExists = countryRepository.existsByCodeAndIdNot(updateCountryRequest.getCode(), countryToUpdate.getId());
+
+            if (codeExists) {
+                throw new InvalidCountryCode("Country code " + updateCountryRequest.getCode() + " already exists for another country.");
+            }
+
+            // Mettez à jour les détails du pays
+            countryToUpdate.setCode(updateCountryRequest.getCode());
+            countryToUpdate.setName(updateCountryRequest.getName());
+            countryRepository.save(countryToUpdate); // Enregistrez les modifications
+
+            return countryMapper.CountryToUpdateCountryRequest(countryToUpdate);// Retourne le pays mis à jour
 
 
+        } else {
+            throw new ResourceNotFoundException("Country not found with code: " + updateCountryRequest.getCode());
+        }
+
+    }
 
 
 

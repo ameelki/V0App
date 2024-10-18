@@ -129,6 +129,122 @@ paths:
                     type: string
                     example: "An unexpected error occurred."
 
+  /countries/{code}:
+    put:
+      summary: Update an existing country
+      description: "Updates the country with the specified code."
+      tags:
+        - Countries
+      operationId: updateCountry
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Code of the country to update
+          schema:
+            type: string
+            example: "FR"
+      requestBody:
+        description: Country object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "FR"
+                  description: "The updated country code."
+                name:
+                  type: string
+                  example: "France"
+                  description: "The updated name of the country."
+      responses:
+        '200':
+          description: Country updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "FR"
+                    description: "The updated country code."
+                  name:
+                    type: string
+                    example: "France"
+                    description: "The updated name of the country."
+        '404':
+          description: Country not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Country not found."
+        '400':
+          description: Invalid input, country update failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid input."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
+
+    delete:
+      summary: Delete a country
+      description: "Deletes the country with the specified code."
+      tags:
+        - Countries
+      operationId: deleteCountry
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Code of the country to delete
+          schema:
+            type: string
+            example: "FR"
+      responses:
+        '204':
+          description: Country deleted successfully.
+        '404':
+          description: Country not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Country not found."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
+
   /countries/{id}/provinces:
     post:
       summary: Create a province for a specific country
