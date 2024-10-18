@@ -1,5 +1,4 @@
 package com.protect.security_manager.exception;
-import com.protect.security_manager.exception.UserAlreadyExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
