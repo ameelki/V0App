@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 import security.manager.api.ApiUtil;
 import security.manager.api.CountriesApiController;
@@ -24,6 +21,7 @@ import security.manager.model.UpdateCountryRequest;
 
 import java.util.List;
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AddressController extends CountriesApiController{
     @Autowired
     ManageAddressService manageAddressService;
@@ -35,8 +33,6 @@ public class AddressController extends CountriesApiController{
    public ResponseEntity<List<GetAllCountriesAndProvinces200ResponseInner>> getAllCountriesAndProvinces(){
          List<GetAllCountriesAndProvinces200ResponseInner> getCountries200ResponseInners=manageAddressService.getCountries();
          return ResponseEntity.ok().body(getCountries200ResponseInners);
-
-
 
     }
 

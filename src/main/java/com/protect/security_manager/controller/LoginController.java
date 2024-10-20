@@ -12,6 +12,7 @@ import security.manager.model.LoginFormRequest;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoginController extends LoginApiController {
 
     @Autowired

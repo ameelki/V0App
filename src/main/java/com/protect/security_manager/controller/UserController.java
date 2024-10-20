@@ -15,7 +15,9 @@ import security.manager.api.UserApiController;
 import security.manager.model.*;
 
 @RestController
-@RequestMapping("/api")// Base path for all endpoints in this controller
+@RequestMapping("/api")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+// Base path for all endpoints in this controller
 public class UserController extends UserApiController {
    @Autowired
    private UserService userService;
