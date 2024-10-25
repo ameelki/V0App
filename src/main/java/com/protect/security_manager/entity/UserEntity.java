@@ -3,6 +3,8 @@ package com.protect.security_manager.entity;
 import jakarta.persistence.*;
 
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "users")
 public class UserEntity {

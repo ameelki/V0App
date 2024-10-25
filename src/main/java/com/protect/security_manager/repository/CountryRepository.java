@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface CountryRepository extends JpaRepository<Country, Long> {
     Optional<Country> findByCode(String code);
     boolean existsByCodeAndIdNot(String code, Long id);
+    boolean existsByCode(String code);
+    void deleteByCode(String code);  // Custom delete method
 
 
 }

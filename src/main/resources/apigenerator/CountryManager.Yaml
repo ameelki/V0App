@@ -144,6 +144,13 @@ paths:
           schema:
             type: string
             example: "FR"
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+            example: "Bearer <your_token_here>"
       requestBody:
         description: Country object that needs to be updated
         required: true
@@ -160,6 +167,7 @@ paths:
                   type: string
                   example: "France"
                   description: "The updated name of the country."
+
       responses:
         '200':
           description: Country updated successfully.
@@ -221,6 +229,13 @@ paths:
           schema:
             type: string
             example: "FR"
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+            example: "Bearer <your_token_here>"
       responses:
         '204':
           description: Country deleted successfully.
@@ -320,6 +335,109 @@ paths:
                   message:
                     type: string
                     example: "Country not found."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
+
+  /countries/{code}/without-provinces:
+    get:
+      summary: Retrieve a country by code without provinces
+      description: "Returns the country object with the specified code, excluding the provinces."
+      tags:
+        - Countries
+      operationId: getCountryByCodeWithoutProvinces
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Code of the country to retrieve
+          schema:
+            type: string
+            example: "FR"
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+            example: "Bearer <your_token_here>"
+      responses:
+        '200':
+          description: Country found successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "FR"
+                    description: "The country code."
+                  name:
+                    type: string
+                    example: "France"
+                    description: "The name of the country."
+        '404':
+          description: Country not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Country not found."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
+
+  /countries/countriesWithoutProvinces:
+    get:
+      summary: Retrieve list of countries without provinces
+      description: "Returns an array of country objects without their respective provinces."
+      tags:
+        - Countries
+      operationId: getAllCountriesWithoutProvinces
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+            example: "Bearer <your_token_here>"
+      responses:
+        '200':
+          description: A list of countries without provinces.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      example: "FR"
+                      description: "The country code."
+                    name:
+                      type: string
+                      example: "France"
+                      description: "The name of the country."
         '500':
           description: Internal server error
           content:

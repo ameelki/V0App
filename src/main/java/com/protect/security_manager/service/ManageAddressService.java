@@ -6,13 +6,11 @@ import com.protect.security_manager.exception.CountryAlreadyExistsException;
 import com.protect.security_manager.exception.InvalidCountryCode;
 import com.protect.security_manager.exception.ResourceNotFoundException;
 import com.protect.security_manager.repository.CountryRepository;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import security.manager.model.CreateCountry201Response;
-import security.manager.model.GetAllCountriesAndProvinces200ResponseInner;
-import security.manager.model.GetAllCountriesAndProvinces200ResponseInnerProvincesInner;
-import security.manager.model.UpdateCountryRequest;
+import reactor.core.publisher.Mono;
+import security.manager.model.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,17 +25,42 @@ public class ManageAddressService {
     @Autowired
     CountryMapper countryMapper;
 
-    public List<GetAllCountriesAndProvinces200ResponseInner> getCountries() {
-        List<Country> countries = countryRepository.findAll();
+    public Mono<List<GetAllCountriesAndProvinces200ResponseInner>> getCountries() {
+        return Mono.fromCallable(() -> {
+            List<Country> countries = countryRepository.findAll();
 
+            if (countries.isEmpty()) {
+                throw new ResourceNotFoundException("No countries found.");
+            }
+
+            return countries.stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
+        });
+    }
+    @Transactional
+
+    public void deleteCountryByCode(String code) {
+        if (!countryRepository.existsByCode(code)) {
+            throw new ResourceNotFoundException("Country not found with code: " + code);
+        }
+        countryRepository.deleteByCode(code);
+    }
+
+    public List<CreateCountryRequest> getAllCountriesWithoutProvinces(
+
+    ) {
+        List<Country> countries = countryRepository.findAll();
         if (countries.isEmpty()) {
             throw new ResourceNotFoundException("No countries found.");
         }
 
         return countries.stream()
-                .map(this::mapToResponse)
+                .map(countryMapper::countryToCreateCountryRequest)
                 .collect(Collectors.toList());
+
     }
+
 
     //Méthode privée pour mapper Country à GetCountries200ResponseInner
     private GetAllCountriesAndProvinces200ResponseInner mapToResponse(Country country) {
@@ -122,6 +145,11 @@ public class ManageAddressService {
 
     }
 
+    public CreateCountryRequest getCountryByCodeWithoutProvinces(String code) {
+        return countryRepository.findByCode(code)
+                .map(countryMapper::countryToCreateCountryRequest)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found with code: " + code));
+    }
 
 
 

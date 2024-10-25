@@ -76,6 +76,7 @@ public class UserService {
             UserEntity userEntity = userMapper.userToUserDto(user);
             userEntity.setAddress(userAddress);
             this.userRepository.save(userEntity);
+
         } catch (DataIntegrityViolationException ex) {
 
                 throw new UserAlreadyExistException(ex.getMessage());

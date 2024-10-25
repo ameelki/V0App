@@ -19,7 +19,7 @@ public class Country {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
     private List<Province> provinces;
 
     // Constructors, getters, and setters
