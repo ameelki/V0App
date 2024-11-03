@@ -18,6 +18,17 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  personId:
+                    type: string
+                    description: ID de la personne créée
+                  user:
+                    $ref: '#/components/schemas/UserSummary'
+
         '401':
           description: Unauthorized
 

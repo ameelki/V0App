@@ -10,8 +10,7 @@ import java.io.Serializable;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     private String username;
     private String firstName;
@@ -28,7 +27,7 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String username, String firstName, String lastName, String email, String password, String phone, Integer userStatus, String cardidnumber, Address address) {
+    public UserEntity(String id, String username, String firstName, String lastName, String email, String password, String phone, Integer userStatus, String cardidnumber, Address address) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -41,11 +40,11 @@ public class UserEntity {
         this.address = address;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

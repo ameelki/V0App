@@ -28,7 +28,8 @@ public class UserService {
     private UserMapper userMapper;
     @Autowired
     private UserRepository userRepository;
-    public void createUser(User user) {
+    public CreateUser200Response createUser(User user) {
+        CreateUser200Response createUser200Response;
         UserRepresentation userRepresentation = convertToUserRepresentation(user);
         RealmResource realmResource = keycloak.realm("SecurityManager");
         UsersResource usersResource = realmResource.users();
@@ -37,16 +38,17 @@ public class UserService {
 
         switch (statusCode) {
             case 201:
-                handleUserCreationSuccess(response, user, realmResource, usersResource);
+                createUser200Response=handleUserCreationSuccess(response, user, realmResource, usersResource);
                 break;
             case 409:
                 throw new UserAlreadyExistException("User already exists");
             default:
                 throw new UserAlreadyExistException("Problem while creating user Retry creation");
         }
+        return createUser200Response;
     }
 
-    private void handleUserCreationSuccess(Response response, User user, RealmResource realmResource, UsersResource usersResource) {
+    private CreateUser200Response handleUserCreationSuccess(Response response, User user, RealmResource realmResource, UsersResource usersResource) {
         String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
         addClientRoleToUser(userId, realmResource, usersResource);
 
@@ -54,7 +56,18 @@ public class UserService {
         UserEntity.Address userAddress = createAddressFromUser(user);
 
         // Save user with address to database
-        saveUserToDatabase(user,userAddress);
+        UserEntity userEntity=  saveUserToDatabase(userId,user,userAddress);
+        CreateUser200Response createUser200Response= new CreateUser200Response();
+
+        createUser200Response.setUser(this.userMapper.user(userEntity));
+        createUser200Response.setPersonId(userEntity.getId());
+
+        return createUser200Response;
+
+
+
+
+
 
     }
     private UserEntity.Address createAddressFromUser(User user) {
@@ -71,17 +84,22 @@ public class UserService {
         usersResource.get(userId).roles().realmLevel().add(Collections.singletonList(clientRole));
     }
 
-    private void saveUserToDatabase(User user,UserEntity.Address userAddress) {
+    private UserEntity saveUserToDatabase(String Userid,User user,UserEntity.Address userAddress) {
+        UserEntity savedUser ;
         try {
             UserEntity userEntity = userMapper.userToUserDto(user);
+            userEntity.setId(Userid);
             userEntity.setAddress(userAddress);
-            this.userRepository.save(userEntity);
+
+        savedUser=this.userRepository.save(userEntity);
+
 
         } catch (DataIntegrityViolationException ex) {
 
                 throw new UserAlreadyExistException(ex.getMessage());
 
         }
+        return savedUser;
     }
     public UserRepresentation convertToUserRepresentation(User user) {
         UserRepresentation userRepresentation = new UserRepresentation();
@@ -185,7 +203,7 @@ UserEntity user= userRepository.findByEmail(email)
         }
 
         UserSummaryWithoutSensitiveData user = new UserSummaryWithoutSensitiveData();
-        user.setId(userRepresentation.getId());
+       // user.setId(userRepresentation.getId());
         user.setUsername(userRepresentation.getUsername());
         user.setFirstName(userRepresentation.getFirstName());
         user.setLastName(userRepresentation.getLastName());

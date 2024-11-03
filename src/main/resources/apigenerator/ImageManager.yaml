@@ -1,0 +1,75 @@
+openapi: 3.0.1
+info:
+  title: Image Manager API
+  description: API pour gérer le téléchargement d'images en base64 avec type de l'image
+  version: 1.0.0
+tags:
+  - name: Image Manager
+    description: Gestion du téléchargement d'images
+
+paths:
+  /api/image-manager/upload/{imageType}:
+    post:
+      tags:
+        - Image Manager
+      summary: Télécharge une image en base64
+      description: Reçoit une image encodée en base64 et un nom de fichier, puis enregistre l'image sur le serveur. Le `imageType` indique le type de l'image (PERSON ou ADDS). Si `imageType` est `PERSON`, alors le champ `personId` est requis.
+      parameters:
+        - name: imageType
+          in: path
+          required: true
+          description: Type de l'image
+          schema:
+            type: string
+            enum: [PERSON, ADDS]
+      requestBody:
+        description: Contient l'image en base64, le nom du fichier, et potentiellement l'ID de la personne
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  description: Image encodée en base64
+                  example: iVBORw0KGgoAAAANSUhEUgAAA...
+                fileName:
+                  type: string
+                  description: Nom du fichier pour l'enregistrement
+                  example: image.png
+                personId:
+                  type: integer
+                  description: ID de la personne (requis si `imageType` est `PERSON`)
+              required:
+                - image
+                - fileName
+      responses:
+        '200':
+          description: Image enregistrée avec succès
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Image enregistrée avec succès"
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "L'image, le nom du fichier, ou le type d'image est manquant ou invalide"
+        '422':
+          description: Champ `personId` manquant lorsque `imageType` est `PERSON`
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Le champ `personId` est obligatoire lorsque `imageType` est `PERSON`"
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Erreur lors de l'enregistrement de l'image"

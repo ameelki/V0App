@@ -30,9 +30,9 @@ public class UserController extends UserApiController {
     }
 
     //@Override
-    public ResponseEntity<Void> createUser(@Valid @RequestBody User body) {
-       this.userService.createUser(body);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CreateUser200Response> createUser(@Valid @RequestBody User body) {
+        CreateUser200Response createUser200Response=this.userService.createUser(body);
+        return ResponseEntity.ok().body(createUser200Response);
     }
 
 
