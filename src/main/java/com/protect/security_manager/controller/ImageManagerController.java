@@ -1,8 +1,4 @@
 package com.protect.security_manager.controller;
-
-import com.protect.security_manager.entity.PersonImageEntity;
-import com.protect.security_manager.exception.InvalidUserCredentiel;
-import com.protect.security_manager.repository.PersonImageEntityRepository;
 import com.protect.security_manager.service.ImageService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -10,7 +6,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,12 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.NativeWebRequest;
-import security.manager.api.ApiUtil;
-import security.manager.api.ImageManagerApi;
 import security.manager.api.ImageManagerApiController;
 import security.manager.model.ImageManagerGetPictureImageTypeGet200Response;
 import security.manager.model.ImageManagerUploadImageTypePostRequest;
-
 import java.io.IOException;
 import java.util.Optional;
 @Controller
