@@ -1,7 +1,9 @@
 package com.protect.security_manager.dataLoader;
 
+import com.protect.security_manager.entity.Ads;
 import com.protect.security_manager.entity.Country;
 import com.protect.security_manager.entity.Province;
+import com.protect.security_manager.repository.AdsRepository;
 import com.protect.security_manager.repository.CountryRepository;
 import com.protect.security_manager.repository.ProvinceRepository;
 import jakarta.persistence.EntityManager;
@@ -11,12 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+
 @Component
 public class DataLoader implements CommandLineRunner {
     @Autowired
     private CountryRepository countryRepository;
     @Autowired
     private ProvinceRepository provinceRepository;
+    @Autowired
+    public AdsRepository adsRepository;
     @PersistenceContext
     private EntityManager entityManager;
     @Override
@@ -95,7 +102,25 @@ public class DataLoader implements CommandLineRunner {
         provinceRepository.save(new Province("MAD", "Madrid", espagne)); // Madrid
         provinceRepository.save(new Province("BAR", "Barcelone", espagne)); // Barcelone
         provinceRepository.save(new Province("SEV", "Séville", espagne)); // Séville
+        LocalDate today = LocalDate.now();
+
+        // Cas 1: Annonce actuellement dans la plage de dates (doit être publiée)
+        Ads adInDateRange = new Ads(today.minusDays(5), today.plusDays(5), false);
+
+        // Cas 2: Annonce expirée (doit être dépubliée)
+        Ads adExpired = new Ads(today.minusDays(10), today.minusDays(1), true);
+
+        // Cas 3: Annonce future (ne doit pas être publiée)
+        Ads adFuture = new Ads(today.plusDays(2), today.plusDays(10), false);
+
+        // Cas 4: Annonce avec dates de début et de fin égales à aujourd'hui (doit être publiée)
+        Ads adExactToday = new Ads(today, today, false);
+
+        // Enregistrement des annonces
+        adsRepository.saveAll(Arrays.asList(adInDateRange, adExpired, adFuture, adExactToday));
+
     }
+
 
 
 

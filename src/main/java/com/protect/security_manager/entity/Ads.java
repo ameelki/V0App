@@ -1,5 +1,6 @@
 package com.protect.security_manager.entity;
 
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
