@@ -1,14 +1,17 @@
 openapi: 3.0.1
 info:
-  title: Image Manager API
+  title: Image Manager Controller
   description: API pour gérer le téléchargement d'images en base64 avec type de l'image
   version: 1.0.0
+servers:
+  - url: http://localhost:8089
+    description: Local server
 tags:
   - name: Image Manager
     description: Gestion du téléchargement d'images
 
 paths:
-  /api/image-manager/upload/{imageType}:
+  /image-manager/upload/{imageType}:
     post:
       tags:
         - Image Manager
@@ -39,8 +42,11 @@ paths:
                   description: Nom du fichier pour l'enregistrement
                   example: image.png
                 personId:
-                  type: integer
+                  type: string
                   description: ID de la personne (requis si `imageType` est `PERSON`)
+                addsId:
+                  type: integer
+                  description: ID de l'ADDS (requis si `imageType` est `ADDS`)
               required:
                 - image
                 - fileName
@@ -73,3 +79,72 @@ paths:
               schema:
                 type: string
                 example: "Erreur lors de l'enregistrement de l'image"
+
+  /image-manager/get-picture/{imageType}:
+    get:
+      tags:
+        - Image Manager
+      summary: Récupère une image par ID
+      description: Récupère une image en fonction du `imageType` et de l'ID (soit `personId` si `imageType` est `PERSON`, soit `addsId` si `imageType` est `ADDS`).
+      parameters:
+        - name: imageType
+          in: path
+          required: true
+          description: Type de l'image à récupérer (PERSON ou ADDS)
+          schema:
+            type: string
+            enum: [PERSON, ADDS]
+        - name: personId
+          in: query
+          description: ID de la personne (requis si `imageType` est `PERSON`)
+          schema:
+            type: string
+        - name: addsId
+          in: query
+          description: ID de l'ADDS (requis si `imageType` est `ADDS`)
+          schema:
+            type: integer
+        - name: Authorization
+          in: header
+          required: true
+          description: Token d'authentification Bearer pour valider l'accès
+          schema:
+            type: string
+            example: "Bearer your_token_here"
+      responses:
+        '200':
+          description: Image récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image:
+                    type: string
+                    description: Image encodée en base64
+                    example: iVBORw0KGgoAAAANSUhEUgAAA...
+                  fileName:
+                    type: string
+                    description: Nom du fichier de l'image
+                    example: image.png
+        '400':
+          description: Paramètre `personId` ou `addsId` manquant ou invalide
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Missing or invalid `personId` or `addsId`"
+        '404':
+          description: Image non trouvée pour l'ID spécifié
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Image not found"
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Error retrieving image"

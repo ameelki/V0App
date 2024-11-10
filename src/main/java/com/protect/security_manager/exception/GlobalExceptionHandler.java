@@ -11,6 +11,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUserAlreadyExistException(UserAlreadyExistException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<String> handleApplicationSupportException(ApplicationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     @ExceptionHandler(InvalidUserCredentiel.class)
     public ResponseEntity<String> handleInvalidCredentiel(InvalidUserCredentiel ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);

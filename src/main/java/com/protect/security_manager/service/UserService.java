@@ -219,7 +219,7 @@ UserEntity user= userRepository.findByEmail(email)
         return user;
     }
 
-    public void updateUser(Long userId, String tokenSubId, User updatedUser) {
+    public void updateUser(String userId, String tokenSubId, User updatedUser) {
         // Validation du tokenSubId
         if (tokenSubId == null || tokenSubId.isEmpty()) {
             throw new IllegalArgumentException("TokenSubId must be provided");
@@ -232,7 +232,7 @@ UserEntity user= userRepository.findByEmail(email)
         updateUserInKeycloak(tokenSubId, updatedUser);
     }
 
-    private void updateUserInDatabase(Long userId, User updatedUser) {
+    private void updateUserInDatabase(String userId, User updatedUser) {
         UserEntity existingUserEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotExistException("User not found with ID: " + userId));
 

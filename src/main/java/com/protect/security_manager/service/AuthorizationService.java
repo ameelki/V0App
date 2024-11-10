@@ -37,6 +37,35 @@ public class AuthorizationService {
 
             return hasRealmRole || hasClientRole;
         }
+    public boolean hasRoleAndCheckResourcesForSameConnectedPerson(String token, String roleToCheck, String personId) {
+        // Récupère l'objet d'authentification actuel
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Supprime "Bearer " du token
+        String verifiedToken = token.replace("Bearer ", "");
+
+        // Décode le token pour obtenir les revendications (claims)
+        DecodedJWT jwt = jwtUtil.decodeToken(verifiedToken);
+        Map<String, Claim> claims = jwt.getClaims();
+
+        // Vérifie si le 'sub' du token correspond au 'personId' passé en paramètre
+        String tokenSub = claims.get("sub").asString();
+        if (!tokenSub.equals(personId)) {
+            // Retourne 'false' si le 'sub' du token ne correspond pas
+            return false;
+        }
+
+        // Vérifie et affiche si le rôle existe dans les rôles de realm
+        boolean hasRealmRole = processRealmRoles(claims, roleToCheck);
+
+        // Vérifie et affiche si le rôle existe dans les rôles de client
+        boolean hasClientRole = processClientRoles(claims, roleToCheck);
+
+        // Retourne 'true' si l'utilisateur a le rôle requis et que le 'sub' correspond
+        return hasRealmRole || hasClientRole;
+    }
+
+
 
     private boolean processRealmRoles(Map<String, Claim> claims, String roleToCheck) {
         return claims.containsKey("realm_access") &&

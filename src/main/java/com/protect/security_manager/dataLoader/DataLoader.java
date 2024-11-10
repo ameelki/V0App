@@ -34,7 +34,6 @@ public class DataLoader implements CommandLineRunner {
         Country tunisie = new Country("TN", "Tunisia");
         Country portugal = new Country("PT", "Portugal");
         Country espagne = new Country("ES", "Espagne"); // Ajout de l'Espagne
-
         countryRepository.save(france);
         countryRepository.save(belgique);
         countryRepository.save(germany);
@@ -43,23 +42,15 @@ public class DataLoader implements CommandLineRunner {
         countryRepository.save(tunisie);
         countryRepository.save(portugal);
         countryRepository.save(espagne); // Sauvegarde de l'Espagne
-
-        // Insérer les provinces pour chaque pays
-
-        // France (6 grandes villes)
         provinceRepository.save(new Province("IDF", "Île-de-France", france)); // Paris
         provinceRepository.save(new Province("PAC", "Provence-Alpes-Côte d'Azur", france)); // Marseille
         provinceRepository.save(new Province("AUR", "Auvergne-Rhône-Alpes", france)); // Lyon
         provinceRepository.save(new Province("MON", "Monaco", france)); // Monaco
         provinceRepository.save(new Province("OCC", "Occitanie", france)); // Toulouse
         provinceRepository.save(new Province("LOR", "Lorraine", france)); // Metz
-
-        // Belgique (3 provinces)
         provinceRepository.save(new Province("BRU", "Bruxelles-Capitale", belgique));
         provinceRepository.save(new Province("WAL", "Wallonie", belgique));
         provinceRepository.save(new Province("FLA", "Flandre", belgique));
-
-        // Allemagne (10 grandes provinces)
         provinceRepository.save(new Province("BY", "Bavière", germany));
         provinceRepository.save(new Province("BE", "Berlin", germany));
         provinceRepository.save(new Province("BW", "Baden-Württemberg", germany));
@@ -70,8 +61,6 @@ public class DataLoader implements CommandLineRunner {
         provinceRepository.save(new Province("RP", "Rhénanie-Palatinat", germany));
         provinceRepository.save(new Province("SH", "Schleswig-Holstein", germany));
         provinceRepository.save(new Province("SN", "Saxe", germany));
-
-        // Villes allemandes (noms en allemand)
         provinceRepository.save(new Province("MUC", "München", germany)); // Munich
         provinceRepository.save(new Province("BER", "Berlin", germany)); // Berlin
         provinceRepository.save(new Province("HAM", "Hamburg", germany)); // Hambourg
@@ -82,8 +71,6 @@ public class DataLoader implements CommandLineRunner {
         provinceRepository.save(new Province("DORT", "Dortmund", germany)); // Dortmund
         provinceRepository.save(new Province("ESS", "Essen", germany)); // Essen
         provinceRepository.save(new Province("LEI", "Leipzig", germany)); // Leipzig
-
-        // Luxembourg (12 communes)
         provinceRepository.save(new Province("LUX", "Luxembourg", luxembourg));
         provinceRepository.save(new Province("ECH", "Echternach", luxembourg));
         provinceRepository.save(new Province("ETZ", "Ettelbruck", luxembourg));
@@ -96,23 +83,15 @@ public class DataLoader implements CommandLineRunner {
         provinceRepository.save(new Province("TET", "Tétange", luxembourg));
         provinceRepository.save(new Province("WET", "Wetteren", luxembourg));
         provinceRepository.save(new Province("AER", "Aerden", luxembourg));
-
-        // Maroc (3 provinces)
         provinceRepository.save(new Province("CAS", "Casablanca", maroc));
         provinceRepository.save(new Province("RAB", "Rabat", maroc));
         provinceRepository.save(new Province("MAR", "Marrakech", maroc));
-
-        // Tunisie (3 provinces)
         provinceRepository.save(new Province("TUN", "Tunis", tunisie));
         provinceRepository.save(new Province("SFAX", "Sfax", tunisie));
         provinceRepository.save(new Province("SOUS", "Sousse", tunisie));
-
-        // Portugal (3 provinces)
         provinceRepository.save(new Province("LIS", "Lisboa", portugal));
         provinceRepository.save(new Province("POR", "Porto", portugal));
         provinceRepository.save(new Province("ALG", "Algarve", portugal));
-
-        // Espagne (3 grandes villes)
         provinceRepository.save(new Province("MAD", "Madrid", espagne)); // Madrid
         provinceRepository.save(new Province("BAR", "Barcelone", espagne)); // Barcelone
         provinceRepository.save(new Province("SEV", "Séville", espagne)); // Séville

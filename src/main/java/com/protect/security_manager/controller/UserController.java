@@ -79,7 +79,7 @@ public class UserController extends UserApiController {
 
 
     public ResponseEntity<UserSummary> updateUserById(
-            @Parameter(name = "userId", description = "ID of the user to be updated", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
+            @Parameter(name = "userId", description = "ID of the user to be updated", required = true, in = ParameterIn.PATH) @PathVariable("userId") String userId,
             @Parameter(name = "tokenSubId", description = "Token subject ID for additional validation or context", required = true, in = ParameterIn.PATH) @PathVariable("tokenSubId") String tokenSubId,
             @Parameter(name = "User", description = "", required = true) @Valid @RequestBody User user
     ) {

@@ -64,8 +64,7 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
           description: ID of the user to be updated
         - name: tokenSubId
           in: path
@@ -173,8 +172,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          format: String
         username:
           type: string
         firstName:

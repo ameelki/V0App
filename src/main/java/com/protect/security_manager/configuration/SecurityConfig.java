@@ -28,6 +28,8 @@ public class SecurityConfig {
                     auth.requestMatchers("/api/**").permitAll();
                     auth.requestMatchers("/user/**").permitAll();
                     auth.requestMatchers("/countries").permitAll();
+                    auth.requestMatchers("/image-manager/upload/PERSON").permitAll();
+       //             auth.requestMatchers("/image-manager/get-picture/PERSON").permitAll(); // Permet l'accès public à l'endpoint d'upload d'image
 
                     auth.requestMatchers("/manage/usersList/**").permitAll();
                     auth.anyRequest().authenticated();
@@ -44,7 +46,8 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200")  // L'adresse de votre frontend
+                                       .allowedOrigins("*")  // Permettre l'accès depuis toutes les origines, sinon spécifiez les URL autorisées
+                        // L'adresse de votre frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH")
                         .allowedHeaders("*");
             }
