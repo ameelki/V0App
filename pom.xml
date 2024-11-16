@@ -203,7 +203,25 @@
 							</configOptions>
 						</configuration>
 					</execution>
-
+					<execution>
+						<id>ads-manager</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>
+								${project.basedir}/src/main/resources/apigenerator/AdsManager.yaml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>security.manager.api</apiPackage>
+							<modelPackage>security.manager.model</modelPackage>
+							<invokerPackage>security.manager</invokerPackage>
+							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+							<configOptions>
+								<useSpringBoot3>true</useSpringBoot3>
+							</configOptions>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 

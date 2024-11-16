@@ -1,0 +1,168 @@
+openapi: 3.0.1
+info:
+  title: Ads Manager Controller
+  description: API pour gérer les opérations CRUD de l'entité Ads
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+tags:
+  - name: Ads Manager
+    description: Gestion des publicités
+
+paths:
+  /ads:
+    get:
+      tags:
+        - Ads Manager
+      summary: Récupère toutes les publicités
+      description: Récupère la liste de toutes les publicités.
+      responses:
+        '200':
+          description: Liste des publicités récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ads'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Erreur lors de la récupération des publicités"
+
+    post:
+      tags:
+        - Ads Manager
+      summary: Crée une nouvelle publicité
+      description: Ajoute une nouvelle publicité.
+      requestBody:
+        description: Détails de la publicité à créer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ads'
+      responses:
+        '201':
+          description: Publicité créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ads'
+        '400':
+          description: Données de la publicité invalides
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Invalid Ads data"
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Erreur lors de la création de la publicité"
+
+  /ads/{id}:
+    get:
+      tags:
+        - Ads Manager
+      summary: Récupère une publicité par ID
+      description: Récupère les détails d'une publicité en fonction de son ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la publicité
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Publicité récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ads'
+        '404':
+          description: Publicité non trouvée
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Ads not found"
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Erreur lors de la récupération de la publicité"
+
+    delete:
+      tags:
+        - Ads Manager
+      summary: Supprime une publicité par ID
+      description: Supprime une publicité en fonction de son ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la publicité
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Publicité supprimée avec succès
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Ads deleted successfully"
+        '404':
+          description: Publicité non trouvée
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Ads not found"
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Erreur lors de la suppression de la publicité"
+
+components:
+  schemas:
+    Ads:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID de la publicité
+          example: 1
+        startDate:
+          type: string
+          format: date
+          description: Date de début de la publicité
+          example: "2023-01-01"
+        endDate:
+          type: string
+          format: date
+          description: Date de fin de la publicité
+          example: "2023-12-31"
+        publishedDate:
+          type: string
+          format: date
+          description: Date de publication
+          example: "2023-06-15"
+        isMarkedForPublish:
+          type: boolean
+          description: Indique si la publicité est marquée pour publication
+          example: true
